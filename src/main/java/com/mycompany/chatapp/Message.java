@@ -16,7 +16,7 @@ public class Message {
     private String recipient;
     private String messageText;
     private String messageHash;
-    
+   
     private static int totalMessagesSent=0; //keeps track of total messages through out the program
     
     public Message(String recipient, String MessageText){
@@ -91,8 +91,8 @@ public class Message {
        return totalMessagesSent;
    }
    public String getMessageText(){return messageText;}
-   public String getRecipientt(){return recipient;}
+   public String getRecipient(){return recipient;}
    public String getMessageID(){return messageID;}
-   public String getMessageHasg(){return messageHash;}
+   public String getMessageHash(){return messageHash;}
 }
     
