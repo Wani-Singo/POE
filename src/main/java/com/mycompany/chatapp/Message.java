@@ -31,7 +31,7 @@ public class Message {
         long id = 1000000000L + rand.nextLong(9000000000L);
         return String.valueOf(id);
     }
-    public boolean checkMessadeID(){
+    public boolean checkMessageID(){
         return this.messageID != null && this.messageID.length() <= 10;
     }
     public String checkRecipientCell(){
