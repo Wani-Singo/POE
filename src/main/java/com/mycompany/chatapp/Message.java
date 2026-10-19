@@ -70,6 +70,29 @@ public class Message {
             return "Invalid option selected.";
         }
     }
-   
+   public boolean storeMessage(){
+       String jsonContent = String.format("{\n \"messageID\": \"%s\" \n \"messageHash\": \"%s\",\n \"recipient\": \"%s\", \n \"message\": \"%s\" \n},\n, this.messadeID, this.messageHash,this.recipient,this.messageText");
+       
+       try (FileWriter writer = new FileWriter("message.json", true)){
+           writer.write(jsonContent);
+           return true;
+       }catch(IOException e){
+           e.printStackTrace();
+           return false;
+       }
+   }
+   public String printMessage(){
+       return "ID: " + this.messageID +
+               ", Hash: " +this.messageHash+
+               ", Recipient: " + this.recipient+
+               ", Message: "+ this.messageText;
+   }
+   public static int returnTotalMessages(){
+       return totalMessagesSent;
+   }
+   public String getMessageText(){return messageText;}
+   public String getRecipientt(){return recipient;}
+   public String getMessageID(){return messageID;}
+   public String getMessageHasg(){return messageHash;}
 }
     
