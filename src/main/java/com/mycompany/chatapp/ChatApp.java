@@ -54,9 +54,9 @@ public class ChatApp {
           String loginStatus = obj.returnLoginStatus(inputUsername, inputPassword);
           System.out.println(loginStatus);
           
-          if(loginStatus.contains("Wlelcom")){
+          if(loginStatus.contains("Welcome")){
               loggedIn = true;
-              System.out.println("----Welcome to QuikChat----");
+              System.out.println("----Welcome to QuickChat----");
               
               boolean running = true;
               while(running){
@@ -76,7 +76,7 @@ public class ChatApp {
                       continue;
                   }
                   if(choice ==1){
-                      System.out.println("How many messages do you wishh to enter? ");
+                      System.out.println("How many messages do you wish to enter? ");
                       int numMessages;
                       try{
                           numMessages = Integer.parseInt(input.nextLine());
@@ -90,7 +90,7 @@ public class ChatApp {
                           System.out.print("Enter recipient cell number (e.g., +27811324...");
                           String recipient = input.nextLine();
                           
-                          System.out.print("Enter your message (Max 205 characters): ");
+                          System.out.print("Enter your message (Max 250 characters): ");
                           String messageText = input.nextLine();
                           
                           Message msg =new Message(recipient, messageText);
@@ -98,14 +98,14 @@ public class ChatApp {
                           String cellcheck = msg.checkRecipientCell();
                           System.out.println(cellcheck);
                           
-                          if(cellcheck.contains("successfully captures")){
-                              System.out.println("Skipping message action dur to invalid recipient number.");
+                          if(!cellcheck.contains("successfully captured")){
+                              System.out.println("Skipping message action due to invalid recipient number.");
                               continue;
                           } 
                           System.out.print("Choose action for this message: ");
                           System.out.print("1. Send Message");
-                          System.out.print("2. Disregard Message(Press 0 to delete)");
-                          System.out.print("Stroe message in JSON file");
+                          System.out.print("2. Disregard Message (Press 0 to delete)");
+                          System.out.print("Store message in JSON file");
                           System.out.println("Choose an option (1 - 3)");
                      
                       

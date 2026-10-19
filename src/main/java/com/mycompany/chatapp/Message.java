@@ -35,28 +35,34 @@ public class Message {
         return this.messageID != null && this.messageID.length() <= 10;
     }
     public String checkRecipientCell(){
-        if(this.recipient != null && this.recipient.startsWith("+") && this.recipient.length() <= 10){
-            return "Cell phone number successfully captured";
+        if(this.recipient != null && this.recipient.matches("^\\+27\\d{9}$")){
+            return "Cell phone number successfully captured.";
         }else{
-            return "Cell phone number is incorrectly formatted or does not contain an intrnational code. Please correct the number and try again";
+            return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
         }
     }
     public String createMessageHash(){
+        if(this.messageID == null || this.messageID.length()<2){
+            return "";
+        }
+        if (this.messageText == null){
+            return "";
+        }
         String text = messageText.trim();
         int firstSpace = text.indexOf(' ');
         int lastSpace = text.lastIndexOf(' ');
         
         String first = (firstSpace < 0 ? text : text.substring(0, firstSpace)).replaceAll("[^A-Za-z0-9]","");
         String last = (lastSpace < 0 ? text : text.substring(lastSpace + 1)).replaceAll("[^A-Za-z0-9]","");
-        return (messageID.substring(0,2) + ":" + numMessageSent + ";" + first + last).toUpperCase();
+        return (messageID.substring(0,2) + ":" + numMessageSent + ":" + first + last).toUpperCase();
     }
     public String SendMessage(int choice){
         if(this.messageText != null && this.messageText.length() > 250){
             int excess = this.messageText.length() - 250;
-            return "Message exceeds 250 characters by " + excess + "; please reduce the size";
+            return "Message exceeds 250 characters by " + excess + "; please reduce the size.";
         }
         if(choice ==1){
-            return "Message successfully sent.";
+            return "Message ready to send.";
         }else if(choice ==2){
             return "Press 0 to delete the message.";
         }else if(choice ==3){
