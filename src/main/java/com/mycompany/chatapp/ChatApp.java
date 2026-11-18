@@ -11,47 +11,64 @@ import java.util.Scanner;
 public class ChatApp {
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        Login obj = new Login();
+       Scanner input = new Scanner(System.in);
         
-       System.out.println("----Welcome to The Lounge----");
+       System.out.println("----Welcome to ChatApp----");
        System.out.println("-----Registration-----");
        
        System.out.print("Enter you First Name: ");
-       String name = input.nextLine();
+       String firstName = input.nextLine();
       
        System.out.print("Enter your Last Name: ");
-       String lastname = input.nextLine();
+       String lastName = input.nextLine();
+       Login obj = new Login(firstName, lastName);
        
-       boolean isRegistered = false;
-       
-       while(!isRegistered){
+       //---Registration
        System.out.println("Enter Username: ");
        String userName = input.nextLine();
-       
+       System.out.println(obj.usernameMessage(userName));
+       while (!obj.checkUserName(userName)){
+           System.out.print("Enter Username: ");
+           userName = input.nextLine().trim();
+           System.out.println(obj.usernameMessage(userName));
+       }
        System.out.println("Enter Password: ");
        String Password = input.nextLine();
-       
-       System.out.println("Enter Cellphone Number(start with +27): ");
+       System.out.println(obj.passwordMessage(Password));
+       while (!obj.checkPasswordComplexity(Password)){
+           System.out.print("Enter Password: ");
+           Password = input.nextLine().trim();
+           System.out.println(obj.passwordMessage(Password));
+       }
+       System.out.println("Enter cell phone number (e.g. +27838968976: ");
        String cellNumber = input.nextLine();
+       System.out.println(obj.cellMessage(cellNumber));
+       while (!obj.checkCellNumber(cellNumber)){
+           System.out.print("Enter cell phone number (e.g. +27838968976: ");
+           cellNumber = input.nextLine().trim();
+           System.out.println(obj.cellMessage(cellNumber));
+       }
+       System.out.println(obj.registerUser(userName, Password, cellNumber));
+    
+       //----Login
+       System.out.println("\n-----Login-----");
+       System.out.println("Enter Username: ");
+       String username = input.nextLine().trim();
+       System.out.println("Enter Password: ");
+       String password = input.nextLine().trim();
+       boolean loggedIn = obj.loginUser(username, password);
+       System.out.println(obj.returnLoginStatus(loggedIn));
        
-       String regMessage= obj.registerUser(userName, Password, cellNumber);
-       System.out.println(regMessage);
+       while (!loggedIn){
+           System.out.println("Enter Username: ");
+           username = input.nextLine().trim();
+           System.out.println("Enter password: ");
+           password = input.nextLine().trim();
+           loggedIn = obj.loginUser(username, password);
+           System.out.println(obj.returnLoginStatus(loggedIn));
+        }
        
-      if(regMessage.equals("Username and Password successfully captured")){
-          isRegistered = true;
-      }else{
-          System.out.println("Please try registering again with the correct details");
-      }
-    }
-        boolean loggedIn = false;
-      while(!loggedIn){
-          System.out.println("Enter Username: ");
-          String inputUsername = input.nextLine();
-          System.out.println("Enter password: ");
-          String inputPassword = input.nextLine();
-         
-          String loginStatus = obj.returnLoginStatus(inputUsername, inputPassword);
+     /*     String loginStatus = obj.returnLoginStatus(inputUsername, inputPassword);
           System.out.println(loginStatus);
           
           if(loginStatus.contains("Welcome")){
@@ -137,7 +154,8 @@ public class ChatApp {
                 }else {
                        System.out.println("Please try again"); 
                      }
-                }
+                }*/
       input.close();
-    }
+    
+}
 }

@@ -12,120 +12,61 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Student
  */
 public class LoginTest {
-    Login obj = new Login();
+    private final Login obj =new Login("Kyle", "Smith");
     
-    @Test
-   
-    public void TestUsernameCorrectlyFormattedMessage(){
-        String Username = "Kyle";
-        String Password = "Ch&&sec@ke99!";
-        String expected = "Welcome Kyle Black, it is great to see you again";
-        String results = obj.returnLoginStatus(Username, Password);
-        assertEquals(expected, results);
+    //Assert true & Assert false
+    @Test void loginSucessful(){
+        obj.registerUser("kyl_1","Ch&&sec@ke99!", "+27838968976");
+        assertTrue(obj.loginUser("kyl_1", "Ch&&sec@ke99!"));
+    }
+    @Test void loginFailed(){
+        obj.registerUser("kyl_1","Ch&&sec@ke99!", "+27838968976");
+        assertFalse(obj.loginUser("kyl_1", "Password"));
+    }
+    @Test void usernameTrue(){
+        assertTrue(obj.checkUserName("kyl_1"));
+    }
+    @Test void usernameFalse(){
+        assertFalse(obj.checkUserName("kyle!!!!!!!!!"));
+    }
+    @Test void passwordTrue(){
+        assertTrue(obj.checkPasswordComplexity("Ch&&sec@ke99!"));
+    }
+    @Test void passwordFale(){
+        assertFalse(obj.checkPasswordComplexity("Password"));
+    }
+    @Test void cellTrue(){
+        assertTrue(obj.checkCellNumber("+27838968976"));
+    }
+    @Test void cellFalse(){
+        assertFalse(obj.checkCellNumber("08966553"));
     }
     
-    @Test
-    public void TestUsernameIncorrectlyFormattedMessage(){
-        String Invalidusername = "kyle!!!!!!!";
-        String Password = "Ch&&sec@ke99!";
-        String expected = "Username is not correctly formatted; please ensure that youur username contains an underscore and is not more than five characters in length";
-        String results = obj.returnLoginStatus(Invalidusername, Password);
-        assertEquals(expected,results);
+    //Assert Equals\
+    @Test void usernameCorrectMessage(){
+        assertEquals("Username successfully captured.", obj.usernameMessage("kyl_1"));
     }
-    
-    @Test
-    public void TestPasswordComplexityMessage(){
-        String Username = "Kyle";
-        String Password = "Ch&&sec@ke99!";
-        String expected ="Password successfully captured";
-        String results = obj.returnLoginStatus(Username, Password);
-        assertEquals(expected,results);
+    @Test void usernameIncorrectMessage(){
+        assertEquals("Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length",
+                obj.usernameMessage("kyle!!!!!"));
     }
-    
-    @Test
-    public void TestPasswordIncomplexityMessage(){
-        String Username = "Kyle";
-        String Invalidpassword = "password";
-        String expected = "Password is not correctly formatted; please ensure that the password contains at leat eight character, a capital letter, a number and, a speacial character";
-        String results = obj.returnLoginStatus(Username, Invalidpassword);
-        assertEquals(expected,results);
+    @Test void passswordCorrectMessage(){
+        assertEquals("Password successfully captured", obj.passwordMessage("Ch&&sec@ke99!"));
     }
-    
-    @Test
-    public void TestcellphoneNumberCorrectlyFormattedMessage(){
-        String Username = "kyl_1";
-        String Password = "Ch&&sec@ke99!";  
-        String cellNumber = "+27838968976";
-        String expected ="Cell number successful captured";
-        String results = obj.registerUser(Username, Password, cellNumber);
-        assertEquals(expected,results);
+    @Test void passwordIncorrectMessage(){
+        assertEquals("Password is not correctly formatted; please ensure that the password  containes at least eight character, a capital letter, a number and a special Character",
+                obj.passwordMessage("Password"));
     }
-    
-    @Test
-    public void TestcellphoneNumberIncorrectlyFormattedMessage(){
-        String Username = "kyl_1";
-        String Password = "Ch&&sec@ke99!"; 
-        String InvalidcellNumber ="0838968976";
-        String expected ="Cell number successful captured";
-        String results = obj.registerUser(Username, Password, InvalidcellNumber);
-        assertEquals(expected,results);
+    @Test void cellCorredtMesssage(){
+        assertEquals("Cell Numnber successfully captured",obj.cellMessage("+27838968976"));
     }
-    
-    @Test
-    public void TestLoginSuccess(){
-        String Username = "kyl_1";
-        String Password = "Ch&&sec@ke99!"; 
-        boolean results = obj.loginUser(Username, Password);
-        assertTrue(results);
+    @Test void cellIncorrectMessage(){
+        assertEquals("Cellphone number is incorrectly formatted or does not contain internation code; please coorect the number and try again",
+                obj.cellMessage("08966553"));
     }
-    
-    @Test
-    public void TestLoginFailure(){
-        String Invalidusername = "kyle!!!!!!!";
-        String Invalidpassword = "password";
-        boolean results = obj.loginUser(Invalidusername, Invalidpassword);
-        assertFalse(results);
-    }
-    
-    @Test
-    public void TestUsernameCorrectformat(){
-        boolean results = obj.checkUserName();
-        assertTrue(results);
-    }
-    
-    @Test
-    public void TestUsernameIncorrectformat(){
-        String Invalidusername = "kyle!!!!!!!";
-        boolean results = obj.checkUserName();
-        assertFalse(results);
-    }
-    
-    @Test
-    public void TestPasswordComplexity(){
-        String Password = "Ch&&sec@ke99!";
-        boolean results = obj.checkPasswordComplexity(Password);
-        assertTrue(results);
-    }
-    
-    @Test
-    public void TestPasswordIncomplexity(){
-        String InvalidPassword = "password";
-        boolean results = obj.checkPasswordComplexity(InvalidPassword);
-        assertFalse(results);
-    }
-    
-    @Test
-    public void TestCellPhoneSuccess(){
-        String cellNumber = "+27838968976";
-        boolean results = obj.checkCellNumber(cellNumber);
-        assertTrue(results);
-    }
-    
-    @Test
-    public void TestCellPhoneFailure(){
-        String InvalidcellNumber = "0838968976";
-        boolean results = obj.checkCellNumber(InvalidcellNumber);
-        assertFalse(results);
+    @Test void welcomeMessage(){
+        obj.registerUser("kyl_1","Ch&&sec@ke99!", "+27838968976");
+        assertEquals("Welcome Kyle Smith it is great to see you again.",obj.returnLoginStatus(obj.loginUser("kyl_1","Ch&&sec@ke99!")));
     }
     
 }
