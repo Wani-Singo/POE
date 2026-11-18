@@ -9,6 +9,16 @@ import java.util.Scanner;
  * @author Student
  */
 public class ChatApp {
+    
+    private static int readInt(Scanner in, String prompt){
+        System.out.print(prompt);
+        String line = in.nextLine().trim();
+        while(!line.matches("\\d{1,9}")){
+            System.out.print("PLease enter a whole number: ");
+            line = in.nextLine().trim();
+        }
+        return Integer.parseInt(line);
+    }
 
     public static void main(String[] args) {
        Scanner input = new Scanner(System.in);
@@ -67,95 +77,76 @@ public class ChatApp {
            loggedIn = obj.loginUser(username, password);
            System.out.println(obj.returnLoginStatus(loggedIn));
         }
-       
-     /*     String loginStatus = obj.returnLoginStatus(inputUsername, inputPassword);
-          System.out.println(loginStatus);
-          
-          if(loginStatus.contains("Welcome")){
-              loggedIn = true;
-              System.out.println("----Welcome to QuickChat----");
-              
-              boolean running = true;
-              while(running){
-                  System.out.println("----Numeric Menu-----");
-                  System.out.println("1. Send Messages");
-                  System.out.println("2. Show recently sent messages");
-                  System.out.println("3. Quit");
-                  System.out.println("Choose an option (1 - 3)");
+       //---ChatApp
+        System.out.println("\n Welcome to QuickChat!");
+        int limit = readInt(input, "How many messages do you wish to enter? ");
+        boolean messagesEntered = false;  
+        boolean running = true;
+            while(running){
+                System.out.println("----Numeric Menu-----");
+                System.out.println("1. Send Messages");
+                System.out.println("2. Show recently sent messages");
+                System.out.println("3. Quit");
+                int choice = readInt(input,"Choose an option (1 - 3)");
                   
-                  String choiceStr = input.nextLine();
-                  int choice;
-                  
-                  try{
-                      choice = Integer.parseInt(choiceStr);
-                  } catch (NumberFormatException e){
-                      System.out.println("Invalid input. please enter a number between 1 and 3");
-                      continue;
-                  }
                   if(choice ==1){
-                      System.out.println("How many messages do you wish to enter? ");
-                      int numMessages;
-                      try{
-                          numMessages = Integer.parseInt(input.nextLine());
-                      }catch (NumberFormatException e){
-                      System.out.println("Invalid number. Returning to menu");
-                      continue;
-                  }
-                      for(int i = 1; i <= numMessages; i++ ){
-                          System.out.println("---Entering Message " + i + " of" + numMessages + "---");
+                      if(messagesEntered){
+                          System.out.println("you have already entered your " +limit+ " messages.");
+                  }else{
+                          for(int i = 1; i <= limit; i++ ){
+                          System.out.println("---Entering Message " + (i-1) + " of" + limit + "---");
                           
-                          System.out.print("Enter recipient cell number (e.g., +27811324...");
-                          String recipient = input.nextLine();
+                          System.out.print("Enter recipient cell number (e.g., +27811324...): ");
+                          String recipient = input.nextLine().trim();
                           
-                          System.out.print("Enter your message (Max 250 characters): ");
-                          String messageText = input.nextLine();
+                          System.out.println(Message.checkRecipientCell(recipient));
+                          while(!Message.isValidRecipient(recipient)){
+                              System.out.println("Enter recipient cell number: ");
+                              recipient = input.nextLine().trim();
+                              System.out.println(Message.checkRecipientCell(recipient));
+                          }
+                          System.out.println("Enter your message: ");
+                          String text = input.nextLine().trim();
+                          System.out.println(Message.checkMessageLength(text));
+                          while(text.length() >250){
+                            System.out.print("Enter your message (Max 250 characters): ");
+                            text = input.nextLine();
+                            System.out.println(Message.checkMessageLength(text));
+                          }
+                          Message msg = new Message( recipient,text);
                           
-                          Message msg =new Message(recipient, messageText);
-                          
-                          String cellcheck = msg.checkRecipientCell();
-                          System.out.println(cellcheck);
-                          
-                          if(!cellcheck.contains("successfully captured")){
-                              System.out.println("Skipping message action due to invalid recipient number.");
-                              continue;
-                          } 
-                          System.out.print("Choose action for this message: ");
                           System.out.print("1. Send Message");
                           System.out.print("2. Disregard Message (Press 0 to delete)");
-                          System.out.print("Store message in JSON file");
-                          System.out.println("Choose an option (1 - 3)");
-                     
-                      
-                      int actionchoice;
-                      try{
-                          actionchoice = Integer.parseInt(input.nextLine());
-                      }catch (NumberFormatException e){
-                      actionchoice = 1;
-                      }
-                      String result = msg.SendMessage(actionchoice);
-                      System.out.println(result);
-                      
-                      System.out.println("Message Details: ");
-                      System.out.println("Messade ID: "+ msg.getMessageID());
-                      System.out.println("Messsage Hash: " + msg.getMessageHash());
-                      System.out.println("Recipient: " + msg.getRecipient());
-                      System.out.println("Message: " + msg.getMessageText());
-                      }
-                        System.out.println("Total Messages processed: "+ Message.returnTotalMessages());
-                      }else if(choice ==2){
-                        System.out.println("Coming Soon");
-                      }else if(choice ==3){
-                          System.out.println("Exiting QuickChat. GoodBye!");
-                              running = false;
-                        }else{
-                              System.out.println("Invalid option. Please choose 1, 2 or 3");
-                    }
-                   }     
-                }else {
-                       System.out.println("Please try again"); 
+                          System.out.print("3. Store message in JSON file");
+                          int option = readInt(input, "Choose an option (1 - 3)");
+                          while(option <1 || option >3){
+                              option = readInt(input, "Please choose 1, 2 or 3.");
+                          }
+                          System.out.println(msg.SentMessage(option));
+                          
+                          if(option == 1){
+                              System.out.println("\n"+ msg.getDetails());
+                          }else if(option==2){
+                              System.out.println(".");
+                              String del = input.nextLine().trim();
+                              if(del.equals("0")){
+                                  System.out.println("Message deleted.");
+                              }
+                          }
+                          }
+                          messagesEntered = true;
+                          System.out.println("\n Messages sent this session: \n" + Message.printMessages());
+                          System.out.println("Total messages sent: "+ Message.returnTotalMessages());
+                            }
+                        }else if(choice ==2 ){
+                            System.out.println("Coming Soon.");
+                        }else if(choice ==3){
+                             running = false;
+                              }else{
+                                    System.out.println("Invalid option. Please choose 1, 2 or 3");
                      }
-                }*/
+                    }
       input.close();
     
-}
+    }
 }
