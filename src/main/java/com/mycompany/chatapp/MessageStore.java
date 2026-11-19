@@ -235,4 +235,32 @@ public class MessageStore {
             }
           return sb.toString();
         }
+        //Getters, these are copies of the filles part of each array
+        public String[] getSentMessagesTexts(){
+            String[] texts = new String [sentCount];
+            for (int i = 0; i < sentCount; i ++){
+                texts[i] = sentMessages[i].getMessageText();
+            }
+            return texts;
+        }
+         public String[] getDisregardedMessagesTexts(){
+            String[] texts = new String [disregardedCount];
+            for (int i = 0; i < disregardedCount; i ++){
+                texts[i] = disregardedMessages[i].getMessageText();
+            }
+            return texts;
+        }
+          public String[] getStoredMessagesTexts(){
+            String[] texts = new String [storedCount];
+            for (int i = 0; i < storedCount; i ++){
+                texts[i] = storedMessages[i].getMessageText();
+            }
+            return texts;
+        }
+        public String [] getMessageHashes(){
+            return Arrays.copyOf(messageHashes, allCount);
+        }
+        public String[] getMessageIDs(){
+            return Arrays.copyOf(messageIDs, allCount);
+        }
 }
