@@ -63,8 +63,11 @@ public class MessageStore {
         allCount++;
     }
     private boolean idExists(String id){
+        if(id== null){
+            return false;
+        }
         for (int i = 0; i < allCount; i++){
-            if (messageIDs[i].equals(id)){
+            if (id.equals(messageIDs[i])){
                 return true;
             }
         }
@@ -105,32 +108,36 @@ public class MessageStore {
             return null;
         }
         int colon = json.indexOf(':', k);
+        if (colon == -1){
+            return null;
+        }
         int open = json.indexOf('"', colon + 1);
-        if (colon == 1 || open == -1){
+        if (open == -1){
             return null;
         }
         StringBuilder value = new StringBuilder();
         int i = open +1 ;
         while (i < json.length() && json.charAt(i) != '"'){
-            int c = json.charAt(i);
+            char c = json.charAt(i);
             if (c == '\\' && i + 1 < json.length()){
                 i++;
-                int next = json.charAt(i);
+                char next = json.charAt(i);
                 value.append(next == 'n' ? '\n' : next);
             }else{
                 value.append(c);
             }
             i++;
-            parsePos = i + 1;
+        }
+            parsePos = (i < json.length()) ? i + 1 : json.length();
             return value.toString();
         }
         //rewrites the message.json from the stored messages array
         public boolean saveStoredToJson(String fileName){
           StringBuilder sb = new StringBuilder("[");
-          for (int = 0; i < storedCount; i++){
+          for (int i = 0 ; i < storedCount ; i++){
             sb.append(i == 0 ? "\n": ",\n").append(storedMessages[i].toJson());
         }
-          sb.append(storedCount==0 ? "]" : "\n");
+          sb.append(storedCount == 0 ? "]" : "\n");
           try{
               Files.writeString(Paths.get(fileName), sb.toString());
               return true;
@@ -161,8 +168,11 @@ public class MessageStore {
             return longest;
         }
         public Message searchByMessageID(String id){
+            if (id ==null){
+                return null;
+            }
             for ( int i = 0; i < allCount; i++){
-                if (messageIDs[i].equals(id)){
+                if (id.equals(messageIDs[i])){
                     return allMessages[i];
                 }
             }
@@ -204,14 +214,17 @@ public class MessageStore {
                     storedMessages[storedCount -1] = null;
                     storedCount--;
                     removeFromRegister(removed.getMessageID());
-                    return "Message: \"" +removed.getMessageText() + "\" sSuccessfully deleted";
+                    return "Message: \"" +removed.getMessageText() + "\" successfully deleted";
                 }
             }
             return "Message not found.";
         }
         private void removeFromRegister(String id){
+            if (id ==null){
+                return;
+            }
             for (int i = 0; i < allCount; i++){
-                if (messageIDs[i].equals(id)){
+                if (id.equals(messageIDs[i])){
                 for (int j = i ; j < allCount -1 ; j++){
                     allMessages[j] = allMessages[j+1];
                     messageHashes[j]= messageHashes[j+1];
@@ -220,6 +233,7 @@ public class MessageStore {
                 allMessages[allCount -1]= null;
                 messageHashes[allCount -1]= null;
                 messageIDs[allCount -1]= null;
+                allCount--;
                 return;
                 }
             }

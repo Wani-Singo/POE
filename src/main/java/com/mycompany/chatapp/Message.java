@@ -24,7 +24,10 @@ public class Message {
     private final String messageText;
     private final String messageHash;
     
-    public Message(String recipient, String messageText, String messageID, int numMessage){
+    public Message (String recipient, String messageText, String messageID, int numMessage){
+        this(recipient, messageText, messageID, numMessage, null);
+    }
+    public Message(String recipient, String messageText, String messageID, int numMessage, String messageHash){
         this.messageID = (messageID != null && !messageID.isBlank() ? messageID : generateID());
         this.recipient = recipient;
         this.messageText = messageText;
@@ -32,6 +35,7 @@ public class Message {
         this.messageHash = (messageHash != null) ?messageHash 
                 :buildHash(messageID, numMessage, messageText);
     }
+    
     public static Message fromStored(String recipient, String messageText, String messageID, String messageHash){
         int num =0;
         int firstColon = messageHash.indexOf(':');
@@ -43,7 +47,7 @@ public class Message {
                 num = 0;
             }
         }
-        return new Message(recipient, messageText, messageID, num);
+        return new Message(recipient, messageText, messageID, num, messageHash);
     }
     
     public static String generateID(){

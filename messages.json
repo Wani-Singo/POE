@@ -40,5 +40,23 @@
   "messageHas": "00:0:HITONIGHT",
   "recipient": "+27718693002",
   "message": "Hi Mike, can you join us for dinner tonight?"
+ },
+ {
+  "messageID": "0012345678",
+  "messageHas": "00:0:HITONIGHT",
+  "recipient": "+27718693002",
+  "message": "Hi Mike, can you join us for dinner tonight?"
+ },
+ {
+  "messageID": "3466263030",
+  "messageHas": "34:1:HEYLATE",
+  "recipient": "+27827748859",
+  "message": "Hey, Please do not wait up. My meeting ran late."
+ },
+ {
+  "messageID": "0012345678",
+  "messageHas": "00:0:HITONIGHT",
+  "recipient": "+27718693002",
+  "message": "Hi Mike, can you join us for dinner tonight?"
  }
 ]

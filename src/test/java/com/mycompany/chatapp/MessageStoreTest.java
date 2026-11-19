@@ -23,8 +23,8 @@ public class MessageStoreTest {
     void setUp(){
         store = new MessageStore();
         m1 = new Message("+27834557896", "Did you get the cake?","1000000001", 0);
-        m2 = new Message("+27838884567", "Where are you? Ypu are late! I have asked you to be on time.","2000000002", 1);
-        m3 = new Message("+27838884567", "Yohoooo, I am at you gate.","3000000003", 2);
+        m2 = new Message("+27838884567", "Where are you? You are late! I have asked you to be on time.","2000000002", 1);
+        m3 = new Message("+27838884567", "Yohoooo, I am at your gate.","3000000003", 2);
         m4 = new Message("0838884567", "It is dinner time!","4000000004", 3);
         m5 = new Message("+27838884567", "Ok. I am leaving without you.","5000000005", 4);
         
@@ -40,28 +40,28 @@ public class MessageStoreTest {
         assertArrayEquals(new String[]{"Did you get the cake?","It is dinner time!"},store.getSentMessagesTexts());
     }
     @Test void longestMessage(){
-        assertEquals("Where are you? Ypu are late! I have asked you to be on time.",store.longestStoredMessage());
+        assertEquals("Where are you? You are late! I have asked you to be on time.",store.longestStoredMessage());
     }
     @Test void searchForMessageID(){
         assertEquals("It is dinner time!",store.searchByMessageID("4000000004").getMessageText());
     }
     @Test void searchByRecipient(){
         assertArrayEquals( new String[]{
-            "Where are you? Ypu are late! I have asked you to be on time.","Ok. I am leaving without you."
+            "Where are you? You are late! I have asked you to be on time.","Ok. I am leaving without you."
         }, store.searchByRecipient("+27838884567"));
     }
     @Test void deleteUsingMessageHash(){
-        assertEquals("Message: \"Where are you? You are late! I have asked you to be on time.\"successfully deleted",store.deleteByHash(m2.getMessageHash()));
+        assertEquals("Message: \"Where are you? You are late! I have asked you to be on time.\" successfully deleted",store.deleteByHash(m2.getMessageHash()));
     }
     @Test void reportShowsSentMessages(){
         String report = store.sentMessagesReport();
-        assertTrue(report.contains("Messsage Hash: "+ m1.getMessageHash()));
+        assertTrue(report.contains("Message Hash: "+ m1.getMessageHash()));
         assertTrue(report.contains("Recipient: +27834557896"));
-        assertTrue(report.contains("Messsage: Did youu get the cake?"));
-        assertTrue(report.contains("Messsage: It is dinner time!"));
+        assertTrue(report.contains("Message: Did you get the cake?"));
+        assertTrue(report.contains("Message: It is dinner time!"));
     }
     @Test void disregardedArrayPopulated(){
-        assertArrayEquals(new String[]{"yohoooo, I am at your gate."},store.getDisregardedMessagesTexts());
+        assertArrayEquals(new String[]{"Yohoooo, I am at your gate."},store.getDisregardedMessagesTexts());
     }
     @Test void hasdAndIDArraysPopulated(){
         assertEquals(5, store.getMessageHashes().length);
@@ -71,12 +71,14 @@ public class MessageStoreTest {
     }
     @Test void jsonSaveAndLoad()throws IOException{
         Path temp = Files.createTempFile("messages", ".json");
-        store.saveStoredToJson(temp.toString());
-        
+        try{
+        assertTrue(store.saveStoredToJson(temp.toString()));
         MessageStore loaded = new MessageStore();
-        assertEquals(2, loaded.loadStoredFromJson(temp.toString()));
-        assertArrayEquals(store.getSentMessagesTexts(),loaded.getStoredMessagesTexts());
+        assertEquals(2,loaded.loadStoredFromJson(temp.toString()));
+        assertArrayEquals(store.getStoredMessagesTexts(),loaded.getStoredMessagesTexts());
+        }finally{
         Files.deleteIfExists(temp);
+        }
     }
     
     //Assert true/ assert false/ assert null
