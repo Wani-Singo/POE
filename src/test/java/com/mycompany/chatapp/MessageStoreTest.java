@@ -63,7 +63,7 @@ public class MessageStoreTest {
     @Test void disregardedArrayPopulated(){
         assertArrayEquals(new String[]{"Yohoooo, I am at your gate."},store.getDisregardedMessagesTexts());
     }
-    @Test void hasdAndIDArraysPopulated(){
+    @Test void hashdAndIDArraysPopulated(){
         assertEquals(5, store.getMessageHashes().length);
         assertArrayEquals(new String[]{
             "1000000001","2000000002","3000000003","4000000004","5000000005"

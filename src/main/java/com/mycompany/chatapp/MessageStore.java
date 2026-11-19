@@ -63,7 +63,7 @@ public class MessageStore {
         allCount++;
     }
     private boolean idExists(String id){
-        if(id== null){
+        if(id == null){
             return false;
         }
         for (int i = 0; i < allCount; i++){
@@ -205,6 +205,9 @@ public class MessageStore {
             return found;
         }
         public String deleteByHash(String hash){
+            if(hash ==null){
+                return "Message not found.";
+            }
             for (int i =0; i< storedCount;i++){
                 if (storedMessages[i].getMessageHash().equals(hash)){
                     Message removed = storedMessages[i];
