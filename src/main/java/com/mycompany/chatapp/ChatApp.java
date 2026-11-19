@@ -132,6 +132,13 @@ public class ChatApp {
         }
        //---ChatApp
         System.out.println("\n Welcome to QuickChat!");
+        
+        MessageStore store = new MessageStore();
+        int loadedCount = store.loadStoredFromJson(JSON_FILE);
+        if ( loadedCount > 0){
+            System.out.println(loadedCount + " stored message(s) loaded from " + JSON_FILE +".");
+        }
+        
         int limit = readInt(input, "How many messages do you wish to enter? ");
         boolean messagesEntered = false;  
         boolean running = true;
@@ -175,16 +182,21 @@ public class ChatApp {
                           while(option <1 || option >3){
                               option = readInt(input, "Please choose 1, 2 or 3.");
                           }
-                          System.out.println(msg.sentMessage(option));
+                          String result = msg.sentMessage(option);
+                          System.out.println(result);
                           
                           if(option == 1){
+                              store.addSent(msg);
                               System.out.println("\n"+ msg.getDetails());
                           }else if(option==2){
+                              store.addDisregarded(msg);
                               System.out.println(".");
                               String del = input.nextLine().trim();
                               if(del.equals("0")){
                                   System.out.println("Message deleted.");
                               }
+                          }else if (result.equals("Message successfully stored.")){
+                              store.addStored(msg);
                           }
                           }
                           messagesEntered = true;
@@ -192,12 +204,14 @@ public class ChatApp {
                           System.out.println("Total messages sent: "+ Message.returnTotalMessages());
                             }
                         }else if(choice ==2 ){
-                            System.out.println("Coming Soon.");
+                            System.out.println("\nRecently sent messages:\n" + store.sentMessagesReport());
                         }else if(choice ==3){
                              running = false;
-                              }else{
+                        }else if ( choice ==4){
+                            storedMessagesMenu(input, store, cellNumber);
+                        }else{
                                     System.out.println("Invalid option. Please choose 1, 2 or 3");
-                     }
+                        }
                     }
       input.close();
     

@@ -45,6 +45,14 @@ public class MessageStore {
       register(m);
       return true;
     }
+    public boolean addStored(Message m){
+        if (storedCount >= Max || allCount >= Max){
+            return false;
+        }
+        storedMessages[storedCount++]= m;
+        register(m);
+        return true;
+    }
     //adds the messages to the all messgaes, hash and ID arrays
     private void register(Message m){
         allMessages[allCount] = m;
