@@ -16,22 +16,22 @@ import java.util.regex.Pattern;
 public class Message {
     private static int totalSent =0; //keeps track of total messages through out the program
     private static final StringBuilder sentLog = new StringBuilder();
-    private static final Pattern Cell = Pattern.compile("^\\+\\d{1,3}\\d{1,10}$");//referencing cell used in Login cell regex
+    private static final Pattern CELL= Pattern.compile("^\\+\\d{1,3}\\d{1,10}$");//referencing cell used in Login cell regex
     
-    private String messageID;
-    private int numMessage;
-    private String recipient;
-    private String messageText;
-    private String messageHash;
+    private final String messageID;
+    private final int numMessage;
+    private final String recipient;
+    private final String messageText;
+    private final String messageHash;
     
-    public Message(String recipient, String MessageText){
-        this.messageID = messageID;
+    public Message(String recipient, String messageText, String messageID, int numMessage){
+        this.messageID = (messageID != null && !messageID.isBlank() ? messageID : generateID());
         this.recipient = recipient;
         this.messageText = messageText;
         this.numMessage= numMessage;
         this.messageHash = buildHash(messageID, numMessage, messageText);
     }
-    private static String generateID(){
+    public static String generateID(){
         StringBuilder id = new StringBuilder();
         for(int i = 0; i < 10; i++){
             id.append(ThreadLocalRandom.current().nextInt(10));
@@ -42,24 +42,25 @@ public class Message {
     public boolean checkMessageID(){
         return messageID != null && messageID.length() <= 10;
     }
-    public String messageIDGenerates(){
-        return "Messaage id generated: " + messageID;
+    public String messageIDGenerated(){
+        return "Message ID generated: " + messageID;
     }
     
     public static boolean isValidRecipient(String cell){
-        return cell != null && Cell.matcher(cell).matches();
+        return cell != null && CELL.matcher(cell).matches();
     }
     public static String checkRecipientCell(String cell){
-        return isValidRecipient(cell)? "Cell phone number successfully captured."
+        return isValidRecipient(cell)
+               ?"Cell phone number successfully captured."
                :"Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
     }
     
     public static String checkMessageLength(String message){
         if(message.length()<= 250){
-            return "Message is ready to send.";
+            return "Message ready to send.";
         }
-        int over= message.length() - 250;
-        return "Message exceeds 250 character by " + over + ", please reduce the size";
+        int over = message.length() - 250;
+        return "Message exceeds 250 characters by " + over + ", please reduce the size.";
     }
     
     public static String buildHash(String id, int num, String message){
@@ -75,8 +76,8 @@ public class Message {
     public String createMessageHash(){
         return messageHash;
     }
-    public String SentMessage(int choice){
-        if(choice ==1){
+    public String sentMessage(int choice){
+        if(choice == 1){
             totalSent++;
             sentLog.append(getDetails()).append("\n\n");
             return "Message successfully sent.";
@@ -102,19 +103,19 @@ public class Message {
        return totalSent;
    }
    
-   public static void restTotoals(){
+   public static void restTotals(){
        totalSent =0;
        sentLog.setLength(0);
    }
    
    public boolean storeMessage(){
        Path file = Paths.get("messages.json");
-       String obj = "{\n"
+       String obj = " {\n"
                + "  \"messageID\": \"" + esc(messageID) +"\",\n"
                +  "  \"messageHas\": \"" + esc(messageHash) +"\",\n"
                + "  \"recipient\": \"" + esc(recipient) +"\",\n"
-               + "  \"message\": \"" + esc(messageText) +"\",\n"
-               + " ]";
+               + "  \"message\": \"" + esc(messageText) +"\"\n"
+               + " }";
        try {
            String content;
            String existing = Files.exists(file) ? Files.readString(file).trim(): "";
@@ -141,5 +142,6 @@ public class Message {
    public String getRecipient(){return recipient;}
    public String getMessageID(){return messageID;}
    public String getMessageHash(){return messageHash;}
+   public int getNumMessage(){return numMessage;}
 }
     

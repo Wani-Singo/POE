@@ -14,7 +14,7 @@ public class ChatApp {
         System.out.print(prompt);
         String line = in.nextLine().trim();
         while(!line.matches("\\d{1,9}")){
-            System.out.print("PLease enter a whole number: ");
+            System.out.print("Please enter a whole number: ");
             line = in.nextLine().trim();
         }
         return Integer.parseInt(line);
@@ -50,11 +50,11 @@ public class ChatApp {
            Password = input.nextLine().trim();
            System.out.println(obj.passwordMessage(Password));
        }
-       System.out.println("Enter cell phone number (e.g. +27838968976: ");
+       System.out.println("Enter cell phone number (e.g. +27838968976: )");
        String cellNumber = input.nextLine();
        System.out.println(obj.cellMessage(cellNumber));
        while (!obj.checkCellNumber(cellNumber)){
-           System.out.print("Enter cell phone number (e.g. +27838968976: ");
+           System.out.print("Enter cell phone number (e.g. +27838968976: )");
            cellNumber = input.nextLine().trim();
            System.out.println(obj.cellMessage(cellNumber));
        }
@@ -87,14 +87,14 @@ public class ChatApp {
                 System.out.println("1. Send Messages");
                 System.out.println("2. Show recently sent messages");
                 System.out.println("3. Quit");
-                int choice = readInt(input,"Choose an option (1 - 3)");
+                int choice = readInt(input,"Choose an option (1 - 3): ");
                   
                   if(choice ==1){
                       if(messagesEntered){
                           System.out.println("you have already entered your " +limit+ " messages.");
                   }else{
                           for(int i = 1; i <= limit; i++ ){
-                          System.out.println("---Entering Message " + (i-1) + " of" + limit + "---");
+                          System.out.println("---Entering Message " + i  + " of " + limit + "---");
                           
                           System.out.print("Enter recipient cell number (e.g., +27811324...): ");
                           String recipient = input.nextLine().trim();
@@ -110,19 +110,19 @@ public class ChatApp {
                           System.out.println(Message.checkMessageLength(text));
                           while(text.length() >250){
                             System.out.print("Enter your message (Max 250 characters): ");
-                            text = input.nextLine();
+                            text = input.nextLine().trim();
                             System.out.println(Message.checkMessageLength(text));
                           }
-                          Message msg = new Message( recipient,text);
+                          Message msg = new Message(recipient,text, Message.generateID(), i);
                           
-                          System.out.print("1. Send Message");
-                          System.out.print("2. Disregard Message (Press 0 to delete)");
-                          System.out.print("3. Store message in JSON file");
-                          int option = readInt(input, "Choose an option (1 - 3)");
+                          System.out.println("1. Send Message");
+                          System.out.println("2. Disregard Message (Press 0 to delete)");
+                          System.out.println("3. Store message in JSON file");
+                          int option = readInt(input, "Choose an option (1 - 3): ");
                           while(option <1 || option >3){
                               option = readInt(input, "Please choose 1, 2 or 3.");
                           }
-                          System.out.println(msg.SentMessage(option));
+                          System.out.println(msg.sentMessage(option));
                           
                           if(option == 1){
                               System.out.println("\n"+ msg.getDetails());

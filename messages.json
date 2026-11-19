@@ -1,0 +1,44 @@
+[
+ {
+  "messageID": "8737344967",
+  "messageHas": "87:1:HILONG",
+  "recipient": "+27827748859",
+  "message": "Hi ma, i will be home late. The meeting ran long."
+ },
+ {
+  "messageID": "5881952587",
+  "messageHas": "58:1:HIARRIVE",
+  "recipient": "+27827748859",
+  "message": "Hi Tumi. May you please tell me what time i am supposed to arrive."
+ },
+ {
+  "messageID": "0012345678",
+  "messageHas": "00:0:HITONIGHT",
+  "recipient": "+27718693002",
+  "message": "Hi Mike, can you join us for dinner tonight?"
+ },
+ {
+  "messageID": "0012345678",
+  "messageHas": "00:0:HITONIGHT",
+  "recipient": "+27718693002",
+  "message": "Hi Mike, can you join us for dinner tonight?"
+ },
+ {
+  "messageID": "0012345678",
+  "messageHas": "00:0:HITONIGHT",
+  "recipient": "+27718693002",
+  "message": "Hi Mike, can you join us for dinner tonight?"
+ },
+ {
+  "messageID": "0012345678",
+  "messageHas": "00:0:HITONIGHT",
+  "recipient": "+27718693002",
+  "message": "Hi Mike, can you join us for dinner tonight?"
+ },
+ {
+  "messageID": "0012345678",
+  "messageHas": "00:0:HITONIGHT",
+  "recipient": "+27718693002",
+  "message": "Hi Mike, can you join us for dinner tonight?"
+ }
+]
