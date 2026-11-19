@@ -128,5 +128,111 @@ public class MessageStore {
               return false;
           }
         }
-    }
+        public String displaySenderAndRecipient(String sender){
+            if (storedCount == 0){
+                return "No stored messages.";
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < storedCount; i++){
+                sb.append("Sender: ").append(sender). append(" | Recipient: ").append(storedMessages[i].getRecipient()).append("\n");
+            }
+            return sb.toString();
+        }
+        public String longestStoredMessage(){
+            if (storedCount == 0){
+                return "No stored messages.";
+            }
+            String longest = storedMessages[0].getMessageText();
+            for (int i = 1; i < storedCount; i++){
+                if (storedMessages[i].getMessageText().length() > longest.length()){
+                    longest = storedMessages[i].getMessageText();
+                }
+            }
+            return longest;
+        }
+        public Message searchByMessageID(String id){
+            for ( int i = 0; i < allCount; i++){
+                if (messageIDs[i].equals(id)){
+                    return allMessages[i];
+                }
+            }
+            return null;
+        }
+        public String[] searchByRecipient(String recipient){
+            int matches = 0;
+            for (int i =0; i < sentCount; i++){
+            if (sentMessages[i].getRecipient().equals(recipient)){
+                matches++;
+                }
+            }
+            for (int i =0; i < storedCount; i++){
+            if (storedMessages[i].getRecipient().equals(recipient)){
+                matches++;
+                }
+            }
+            String[] found = new String[matches];
+            int pos =0;
+            for (int i =0; i < sentCount; i++){
+            if (sentMessages[i].getRecipient().equals(recipient)){
+                found[pos++] = sentMessages[i].getMessageText();
+                }
+            }
+            for (int i =0; i < storedCount; i++){
+            if (storedMessages[i].getRecipient().equals(recipient)){
+                found[pos++] = storedMessages[i].getMessageText();
+                }
+            }
+            return found;
+        }
+        public String deleteByHash(String hash){
+            for (int i =0; i< storedCount;i++){
+                if (storedMessages[i].getMessageHash().equals(hash)){
+                    Message removed = storedMessages[i];
+                    for (int j = i; j < storedCount-1; j++){
+                        storedMessages[j] = storedMessages[j + 1];
+                    }
+                    storedMessages[storedCount -1] = null;
+                    storedCount--;
+                    removeFromRegister(removed.getMessageID());
+                    return "Message: \"" +removed.getMessageText() + "\" sSuccessfully deleted";
+                }
+            }
+            return "Message not found.";
+        }
+        private void removeFromRegister(String id){
+            for (int i = 0; i < allCount; i++){
+                if (messageIDs[i].equals(id)){
+                for (int j = i ; j < allCount -1 ; j++){
+                    allMessages[j] = allMessages[j+1];
+                    messageHashes[j]= messageHashes[j+1];
+                    messageIDs[j] = messageIDs[j+1];
+                    }
+                allMessages[allCount -1]= null;
+                messageHashes[allCount -1]= null;
+                messageIDs[allCount -1]= null;
+                return;
+                }
+            }
+        }
+        public String storedMessagesReport(){
+            if (storedCount == 0){
+                return "No stored messages.";
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i =0; i < storedCount; i++){
+                sb.append(storedMessages[i].getDetails()).append("\n\n");
+            }
+            return sb.toString();
+        }
+        public String sentMessagesReport(){
+            if (sentCount == 0){
+                return "No messages have been sent.";
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i =0; i < sentCount; i++){
+            sb.append("Message Hash: ").append(sentMessages[i].getMessageHash()).append("\n").append("Recipient: ").append(sentMessages[i].getRecipient()).append("\n")
+                    .append("Message: ").append(sentMessages[i].getMessageText()).append("\n\n");
+            }
+          return sb.toString();
+        }
 }
