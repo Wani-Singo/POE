@@ -29,8 +29,23 @@ public class Message {
         this.recipient = recipient;
         this.messageText = messageText;
         this.numMessage= numMessage;
-        this.messageHash = buildHash(messageID, numMessage, messageText);
+        this.messageHash = (messageHash != null) ?messageHash 
+                :buildHash(messageID, numMessage, messageText);
     }
+    public static Message fromStored(String recipient, String messageText, String messageID, String messageHash){
+        int num =0;
+        int firstColon = messageHash.indexOf(':');
+        int secondColon = messageHash.indexOf(':', firstColon + 1);
+        if (firstColon != -1 && secondColon != -1){
+            try{
+                num = Integer.parseInt(messageHash.substring(firstColon +1, secondColon));
+            }catch (NumberFormatException e){
+                num = 0;
+            }
+        }
+        return new Message(recipient, messageText, messageID, num);
+    }
+    
     public static String generateID(){
         StringBuilder id = new StringBuilder();
         for(int i = 0; i < 10; i++){
@@ -108,14 +123,18 @@ public class Message {
        sentLog.setLength(0);
    }
    
-   public boolean storeMessage(){
-       Path file = Paths.get("messages.json");
-       String obj = " {\n"
+   public String toJson(){
+       return " {\n"
                + "  \"messageID\": \"" + esc(messageID) +"\",\n"
                +  "  \"messageHas\": \"" + esc(messageHash) +"\",\n"
                + "  \"recipient\": \"" + esc(recipient) +"\",\n"
                + "  \"message\": \"" + esc(messageText) +"\"\n"
                + " }";
+    }
+   
+    public boolean storeMessage(){
+       Path file = Paths.get("messages.json");
+       String obj =toJson();
        try {
            String content;
            String existing = Files.exists(file) ? Files.readString(file).trim(): "";

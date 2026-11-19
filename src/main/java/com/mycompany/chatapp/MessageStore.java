@@ -28,6 +28,8 @@ public class MessageStore {
     private int storedCount = 0;
     private int allCount = 0;
     
+    private int parsePos = 0;
+    
     //populating the Array
     public boolean addSent(Message m){
         if (sentCount >= Max || allCount >= Max){
@@ -119,7 +121,7 @@ public class MessageStore {
                 value.append(c);
             }
             i++;
-            parsePos = 1 + 1;
+            parsePos = i + 1;
             return value.toString();
         }
         //rewrites the message.json from the stored messages array
