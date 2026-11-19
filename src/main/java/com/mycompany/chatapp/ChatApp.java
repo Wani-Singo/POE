@@ -10,6 +10,8 @@ import java.util.Scanner;
  */
 public class ChatApp {
     
+    private static final String JSON_FILE = "messages.json";
+    
     private static int readInt(Scanner in, String prompt){
         System.out.print(prompt);
         String line = in.nextLine().trim();
@@ -18,6 +20,57 @@ public class ChatApp {
             line = in.nextLine().trim();
         }
         return Integer.parseInt(line);
+    }
+    
+    // the stored messages menu
+    private static void storedMessagesMenu(Scanner in, MessageStore store, String sender){
+        boolean inMenu = true;
+        while(inMenu){
+            System.out.println("\n--------Stored Messages------");
+            System.out.println("1. Display sender and recipient of all stored messages");
+            System.out.println("2. Display the longest stored message");
+            System.out.println("3. Search for a message ID");
+            System.out.println("4. Search for all messages fora recipient");
+            System.out.println("5. Delete a message using the message hash");
+            System.out.println("6. Display a report of all stored messages");
+            System.out.println("7. Back to main menu");
+            int pick = readInt(in, "Choose an Option (1-7): ");
+            
+            if (pick == 1){
+                System.out.println(store.displaySenderAndRecipient(sender));
+            }else if (pick == 2){
+                System.out.println("Longest stored message: " + store.longestStoredMessage());
+            }else if (pick == 3){
+                System.out.println("Enter the message ID: ");
+                Message found = store.searchByMessageID(in.nextLine().trim());
+                if (found == null){
+                    System.out.println("No message found with that ID.");
+                }else{
+                    System.out.println("Recipient: " + found.getRecipient());
+                    System.out.println("Message: " + found.getMessageText());
+                }
+            }else if (pick == 4){
+                System.out.println("Enter the recipient's cell number: ");
+                String[] results = store.searchByRecipient(in.nextLine().trim());
+                if (results.length == 0){
+                    System.out.println("No messages found for that recipient");
+                }else{
+                    for (int i = 0; i < results.length; i++){
+                        System.out.println((i +1)+". "+results[i]);
+                    }
+                }
+            }else if ( pick == 5){
+                System.out.println("Enter the message Hash: ");
+                System.out.println(store.deleteByHash(in.nextLine().trim().toUpperCase()));
+                store.saveStoredToJson(JSON_FILE);
+            }else if (pick == 6){
+                System.out.println(store.storedMessagesReport());
+            }else if (pick ==7){
+                inMenu = false;
+            }else{
+                System.out.println("Invalid option. Please Choose 1 to 7.");
+            }
+        }
     }
 
     public static void main(String[] args) {
